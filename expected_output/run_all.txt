@@ -1,0 +1,95 @@
+
+$ python engine.py
+i', '0.855757+0.414664i', '0.855757-0.414664i']
+  real_eig_rule_failed: False
+  T1=0.049070978815174526, T2=2.220446049250313e-16, T3=1.4432899320127035e-15, imag_residual=2.9456234448567474e-16
+  failed_tests: ['T1']
+
+--- Stream: iid ---
+  eigenvalues: ['-0.993836+0.000000i', '-0.746925+0.000000i', '-0.496246+0.846248i', '-0.496246-0.846248i', '0.791486+0.582868i', '0.791486-0.582868i']
+  real_eig_rule_failed: True
+  T1=None, T2=None, T3=None, imag_residual=None
+  failed_tests: ['real_eigenvalue_rule']
+
+Stage C: PASS
+
+Verdict: PASS
+Reason: Stages A and B verified exactly; Stage C matched all three predeclared predictions (torus passes T1/T2/T3, logistic and iid each fail at least one test).
+
+$ python single_moment_fit.py
+8.881784197001252e-16, orthogonality_residual=1.110e-15
+logistic Born test: max_born_error=0.000603, max_completeness_error_empirical=8.882e-16, fails_as_predicted=False
+iid j_tests (Procrustes A): passes_all=True, real_eig_rule_failed=False, T1=7.771561172376096e-16, orthogonality_residual=1.221e-15
+iid Born test: max_born_error=0.001142, max_completeness_error_empirical=4.441e-16, fails_as_predicted=False
+
+Stage C: FAIL
+
+Verdict: FAIL
+Reason: Stage A and B held (torus max_born_error=0.000037 < 0.01), but neither control failed as predicted (logistic max_born_error=0.000603, fails_as_predicted=False; iid max_born_error=0.001142, fails_as_predicted=False) - controls not separated from torus.
+  [PASS] the quantum probability rule fits one snapshot of the clockwork (article: beautifully, far better than it needed to be): error 0.000037 against a pass mark of 0.01
+  [PASS] and it fits the controls too, including pure random numbers (article: a test a random number generator passes is not a test): logistic 0.000603 passed too, iid 0.001142 passed too
+
+$ python two_moment_quantum.py
+.33213643 0.33594219 0.33192138], degenerate=False
+logistic: born_fraction = 0.0 (0/30)
+
+--- iid ---
+iid: j_tests real_eig_rule_failed=True (Procrustes) -> j_admissible=False, skipping Born comparison.
+
+============================================================
+STAGE D - Wall characterization (torus, required regardless of verdict)
+============================================================
+Stage D: p2_row_spread_max=0.3808117132610982, p2_D_S_bar_max=0.25849015699042865, p2_D_Bbar_gt_D_S_bar_all=False, memory_relaxation_tau=1
+
+Verdict: PASS
+Reason: Stage A passed (hybrid estimator); born_fraction_torus=0.5000 >= 0.30; controls satisfy <= 0.10 or J-inadmissible (logistic: 0.0, iid: None).
+
+$ python the_rotor.py
+ 11: loss=0.56482, nit=132
+  optimizer start 12: loss=0.48477, nit=132
+  optimizer start 13: loss=0.51414, nit=1050
+  optimizer start 14: loss=0.47563, nit=115
+  optimizer start 15: loss=0.50496, nit=132
+  optimizer start 16: loss=0.55999, nit=115
+  optimizer start 17: loss=0.49682, nit=151
+  optimizer start 18: loss=0.46745, nit=122
+  optimizer start 19: loss=0.48135, nit=132
+Best found: source=spec, loss=0.30198
+D1 near_optimal (gap=0.03069): False
+D2 haar_distinguished (percentile=0.00): True
+D3 recovery (phase_dev=0.0000, align=0.8171): False
+
+Verdict: PARTIAL
+Reason: Stages A, B passed. Exactly one of D1 (False), D2 (True) holds - a partial distinction. gap=0.0307, haar_percentile=0.00.
+  [PASS] twenty two-moment comparisons, and the plain wheel wins every one (article: twenty out of twenty): 20 of 20
+  [PASS] the wheel gets them right to about a percent, the quantum formula misses badly: wheel 1.2% off, quantum formula 37% off
+
+$ python the_proof.py
+kernel vs Born target) = 0.5291 at {'seed': 93, 'tau': 10}
+  stored median D_cls (classical-reconstruction fit quality) = 0.01193
+
+Verdict: PASS
+Reason: All five lemmas verified exactly (rational/symbolic, no floats); the write-up has no untagged step; Stage C's stored-number comparison is consistent (delta gives K3=0.9996, and the classical/Born gaps were measured up to 0.529 in the runs above).
+
+Total runtime: 0.1s (0.0 min)
+
+Verdict: PASS
+Reason: All five lemmas verified exactly (rational/symbolic, no floats); the write-up has no untagged step; Stage C's stored-number comparison is consistent (delta gives K3=0.9996, and the classical/Born gaps were measured up to 0.529 in the runs above).
+  [PASS] every lemma of the proof checks out in exact arithmetic (article: no floating point anywhere in the proof half): 5 of 5 lemmas
+  [PASS] every possible kind of day is enumerated, and none beats the ceiling (article: it tallies every possible kind of day): 8 cases, scoring only [-3, 1] - nothing above 1
+  [PASS] and a quantum system does beat it, reaching exactly 3/2 at 60 degrees (article: flip to TOUCH, set the gap to 60 degrees, watch it go to 1.5): K3 at 60 degrees = 3/2, and it is the maximum
+  [PASS] no watcher, of any setting, reproduces what the toucher does (article: every possible passive setting, exhaustively - none match it): all 7 passive settings tested, none match the touch
+  [PASS] my own watched clockwork sits exactly on the ceiling, never through it (article: pressed flat against it, and never once through): score 0.999634 against the ceiling of 1
+
+====================================================================
+[PASS] the quantum probability rule fits one snapshot of the clockwork (article: beautifully, far better than it needed to be)
+[PASS] and it fits the controls too, including pure random numbers (article: a test a random number generator passes is not a test)
+[PASS] twenty two-moment comparisons, and the plain wheel wins every one (article: twenty out of twenty)
+[PASS] the wheel gets them right to about a percent, the quantum formula misses badly
+[PASS] every lemma of the proof checks out in exact arithmetic (article: no floating point anywhere in the proof half)
+[PASS] every possible kind of day is enumerated, and none beats the ceiling (article: it tallies every possible kind of day)
+[PASS] and a quantum system does beat it, reaching exactly 3/2 at 60 degrees (article: flip to TOUCH, set the gap to 60 degrees, watch it go to 1.5)
+[PASS] no watcher, of any setting, reproduces what the toucher does (article: every possible passive setting, exhaustively - none match it)
+[PASS] my own watched clockwork sits exactly on the ceiling, never through it (article: pressed flat against it, and never once through)
+====================================================================
+all 9 checks reproduced
